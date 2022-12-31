@@ -58,6 +58,7 @@ public class StudentUI {
 //		子菜单
 		JMenuItem item_1 = new JMenuItem("添加学生");
 		JMenuItem item_2 = new JMenuItem("导入成绩");
+		JMenuItem item_3 = new JMenuItem("修改信息");
 
 //		定义字体
 		Font font = new Font("黑体", Font.PLAIN, 15);
@@ -67,10 +68,13 @@ public class StudentUI {
 		men_1.setFont(font);
 		men_2.setFont(font);
 		item_1.setFont(font);
+		item_2.setFont(font);
+		item_3.setFont(font);
 
 //		加入
 		men_1.add(item_1);
 		men_1.add(item_2);
+		men_1.add(item_3);
 
 		bar.add(men_1);
 		bar.add(men_2);
@@ -136,6 +140,17 @@ public class StudentUI {
 				}
 			}
 		});
+
+//		注册 修改学生 按钮的监听
+		item_3.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				StudentUI.init_4();
+			}
+		});
+
 	}
 
 //	添加学生界面
@@ -236,10 +251,83 @@ public class StudentUI {
 		jpanel_1.add(jbutton_4);
 
 //		注册监听
-		StudentListen_4 e_4 = new StudentListen_4(jbutton_3, jbutton_4, jtextfield, i);
-		jbutton_3.addActionListener(e_4);
-		jbutton_4.addActionListener(e_4);
+		StudentListen_2 e_2 = new StudentListen_2(jbutton_3, jbutton_4, jtextfield, i);
+		jbutton_3.addActionListener(e_2);
+		jbutton_4.addActionListener(e_2);
 
+	}
+
+//	修改 学生界面
+	public static void init_4() {
+//		清空组件
+		StudentUI.jpanel_1.removeAll();
+//		刷新面板
+		StudentUI.jpanel_1.updateUI();
+//		字体
+		Font font = new Font("黑体", Font.PLAIN, 15);
+//		学科名
+		String s[] = new String[StudentInformation.number];
+		s[0] = "学       号：";
+		s[1] = "姓       名：";
+		s[2] = "性       别：";
+		s[3] = "出生日期：";
+		s[4] = "j a v a：";
+		s[5] = "体       育：";
+		s[6] = "离散数学：";
+		s[7] = "英       语：";
+		s[8] = "总       分：";
+
+//		标签
+		JLabel jlabel[] = new JLabel[StudentInformation.number];
+//		文本框
+		JTextField jtextfield[] = new JTextField[StudentInformation.number];
+//		按钮
+		JButton jbutton_5 = new JButton("修改");
+		JButton jbutton_6 = new JButton("清除");
+		jbutton_5.setFont(font);
+		jbutton_6.setFont(font);
+		JPanel jp2 = new JPanel();
+
+		JLabel jlabel1 = new JLabel("修改信息                                        ");
+		StudentUI.jpanel_1.add(jlabel1);
+
+//		实例化
+		for (int i = 0, j = 0; i < StudentInformation.number; i++, j++) {
+			jlabel[i] = new JLabel(s[i]);
+			StudentUI.jpanel_1.add(jlabel[i]);
+			if (i == 2) {
+				JRadioButton radioButton1 = new JRadioButton("男");
+				JRadioButton radioButton2 = new JRadioButton("女");
+				ButtonGroup bg = new ButtonGroup();
+				bg.add(radioButton1);
+				bg.add(radioButton2);
+				jp2 = new JPanel(new GridLayout(1, 2));// 一行两列
+				jp2.add(radioButton1);
+				jp2.add(radioButton2);
+				StudentUI.jpanel_1.add(jp2);
+			} else {
+				jtextfield[i] = new JTextField(12);
+				StudentUI.jpanel_1.add(jtextfield[i]);
+			}
+//			j控制添加次数防止重复添加
+			if (j == 0) {
+				JLabel L_1 = new JLabel("学号不能被修改!");
+				JLabel L_2 = new JLabel("请在下面输入更新的信息：");
+				StudentUI.jpanel_1.add(L_1);
+				StudentUI.jpanel_1.add(L_2);
+			}
+		}
+
+//		设置文本框默认值(总分自动计算,不可编辑)
+		jtextfield[StudentInformation.number - 1].setText("自动计算，无需输入");
+		jtextfield[StudentInformation.number - 1].setEditable(false);
+
+		StudentUI.jpanel_1.add(jbutton_5);
+		StudentUI.jpanel_1.add(jbutton_6);
+//		注册监听
+		StudentListen_3 e_3 = new StudentListen_3(jp2, jbutton_5, jbutton_6, jtextfield);
+		jbutton_5.addActionListener(e_3);
+		jbutton_6.addActionListener(e_3);
 	}
 
 }

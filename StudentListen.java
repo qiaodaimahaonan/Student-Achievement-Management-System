@@ -53,14 +53,14 @@ public class StudentListen implements ActionListener {
 }
 
 //点击了导入成绩的提交按钮
-class StudentListen_4 implements ActionListener {
+class StudentListen_2 implements ActionListener {
 
 	JButton jbutton_3;
 	JButton jbutton_4;
 	JTextField jtextfield[];
 	int i;// 表示学科
 
-	public StudentListen_4(JButton jbutton_3, JButton jbutton_4, JTextField jtextfield[], int i) {
+	public StudentListen_2(JButton jbutton_3, JButton jbutton_4, JTextField jtextfield[], int i) {
 		this.jbutton_3 = jbutton_3;
 		this.jbutton_4 = jbutton_4;
 		this.jtextfield = jtextfield;
@@ -160,7 +160,92 @@ class StudentListen_4 implements ActionListener {
 				jtextfield[j].setText("");
 			}
 		}
+	}
+}
 
+//点击了修改学生的修改按钮
+class StudentListen_3 implements ActionListener {
+
+	JButton jbutton_5;
+	JButton jbutton_6;
+	JTextField jtextfield[];
+	JPanel jp2;
+
+	public StudentListen_3(JPanel jp2, JButton jbutton_5, JButton jbutton_6, JTextField jtextfield[]) {
+		this.jp2 = jp2;
+		this.jbutton_5 = jbutton_5;
+		this.jbutton_6 = jbutton_6;
+		this.jtextfield = jtextfield;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+//		点击了 修改 按钮
+		if (e.getSource() == jbutton_5) {
+			for (int i = 0; i < StudentInformation.all_student.size(); i++) {
+//				学号相同则修改学生信息
+				if (jtextfield[0].getText().equals("" + StudentInformation.all_student.get(i).get_Id())) {
+//					修改信息(学号不可修改,总分重新计算)
+
+					// 判断是否进行了性别选择并读取选择
+					String str = "";
+					Component[] jcbs = jp2.getComponents();// 将勾选的内容存入数组
+					for (Component component : jcbs) {
+						JRadioButton jcb = (JRadioButton) component;
+						if (jcb.isSelected()) {
+							str += jcb.getText() + "";
+						}
+					}
+					if (str.equals("")) {
+						JOptionPane.showMessageDialog(null, "请选择学生性别", "提示", JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
+
+					if (jtextfield[4].getText().trim().equals("")) {
+						JOptionPane.showMessageDialog(null, "请输入java成绩", "提示", JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
+					if (jtextfield[5].getText().trim().equals("")) {
+						JOptionPane.showMessageDialog(null, "请输入体育成绩", "提示", JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
+					if (jtextfield[6].getText().trim().equals("")) {
+						JOptionPane.showMessageDialog(null, "请输入离散数学成绩", "提示", JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
+					if (jtextfield[7].getText().trim().equals("")) {
+						JOptionPane.showMessageDialog(null, "请输入英语成绩", "提示", JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
+
+					StudentInformation.all_student.get(i).set_Name(jtextfield[1].getText());
+					StudentInformation.all_student.get(i).setGender(str);
+					StudentInformation.all_student.get(i).setDate(jtextfield[3].getText());
+					StudentInformation.all_student.get(i).set_java(Integer.parseInt(jtextfield[4].getText()));
+					StudentInformation.all_student.get(i).set_physical(Integer.parseInt(jtextfield[5].getText()));
+					StudentInformation.all_student.get(i)
+							.set_Discrete_Mathematics(Integer.parseInt(jtextfield[6].getText()));
+					StudentInformation.all_student.get(i).set_English(Integer.parseInt(jtextfield[7].getText()));
+
+//						重新计算总分
+					int sum = 0;
+					for (int j = 4; j < StudentInformation.number - 1; j++) {
+						sum += Integer.parseInt(jtextfield[j].getText());
+					}
+//						添加总分信息
+					StudentInformation.all_student.get(i).set_Total(sum);
+//						提示
+					JOptionPane.showMessageDialog(null, "修改学生信息成功！！！", "提示", JOptionPane.PLAIN_MESSAGE);
+					StudentUI.init_4();
+					return;
+				}
+			}
+//			未查询到学生，提示
+			JOptionPane.showMessageDialog(null, "未查询到当前学生！！！\n修改失败！！！", "消息提示", JOptionPane.WARNING_MESSAGE);
+		} else {
+			jtextfield[0].setText("");
+		}
 	}
 
 }
