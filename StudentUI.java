@@ -59,6 +59,7 @@ public class StudentUI {
 		JMenuItem item_1 = new JMenuItem("添加学生");
 		JMenuItem item_2 = new JMenuItem("导入成绩");
 		JMenuItem item_3 = new JMenuItem("修改信息");
+		JMenuItem item_4 = new JMenuItem("删除学生");
 
 //		定义字体
 		Font font = new Font("黑体", Font.PLAIN, 15);
@@ -70,11 +71,13 @@ public class StudentUI {
 		item_1.setFont(font);
 		item_2.setFont(font);
 		item_3.setFont(font);
+		item_4.setFont(font);
 
 //		加入
 		men_1.add(item_1);
 		men_1.add(item_2);
 		men_1.add(item_3);
+		men_1.add(item_4);
 
 		bar.add(men_1);
 		bar.add(men_2);
@@ -148,6 +151,15 @@ public class StudentUI {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				StudentUI.init_4();
+			}
+		});
+//		注册 删除学生 按钮的监听
+		item_4.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				StudentUI.init_5();
 			}
 		});
 
@@ -328,6 +340,40 @@ public class StudentUI {
 		StudentListen_3 e_3 = new StudentListen_3(jp2, jbutton_5, jbutton_6, jtextfield);
 		jbutton_5.addActionListener(e_3);
 		jbutton_6.addActionListener(e_3);
+	}
+
+//	删除 学生界面
+	public static void init_5() {
+//		清空组件
+		StudentUI.jpanel_1.removeAll();
+//		刷新面板
+		StudentUI.jpanel_1.updateUI();
+//		字体
+		Font font = new Font("黑体", Font.PLAIN, 15);
+
+		JLabel jlabel1 = new JLabel("删除学生                                        ");
+		StudentUI.jpanel_1.add(jlabel1);
+
+//		标签
+		JLabel jlabel_1 = new JLabel(" 学       号：");
+//		文本框
+		JTextField jtextfield_1 = new JTextField(10);
+//		添加到面板
+		StudentUI.jpanel_1.add(jlabel_1);
+		StudentUI.jpanel_1.add(jtextfield_1);
+
+//		按钮
+		JButton jbutton_5 = new JButton("删除");
+		JButton jbutton_6 = new JButton("清除");
+		jbutton_5.setFont(font);
+		jbutton_6.setFont(font);
+		StudentUI.jpanel_1.add(jbutton_5);
+		StudentUI.jpanel_1.add(jbutton_6);
+
+//		注册监听
+		StudentListen_4 e_4 = new StudentListen_4(jbutton_5, jbutton_6, jtextfield_1);
+		jbutton_5.addActionListener(e_4);
+		jbutton_6.addActionListener(e_4);
 	}
 
 }

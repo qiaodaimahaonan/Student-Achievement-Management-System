@@ -247,5 +247,39 @@ class StudentListen_3 implements ActionListener {
 			jtextfield[0].setText("");
 		}
 	}
+}
 
+//点击了删除学生的删除按钮
+class StudentListen_4 implements ActionListener {
+
+	JButton jbutton_5;
+	JButton jbutton_6;
+	JTextField jtextfield_1;
+
+	public StudentListen_4(JButton jbutton_5, JButton jbutton_6, JTextField jtextfield_1) {
+		this.jbutton_5 = jbutton_5;
+		this.jbutton_6 = jbutton_6;
+		this.jtextfield_1 = jtextfield_1;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+//		点击了 删除 按钮
+		if (e.getSource() == jbutton_5) {
+			for (int i = 0; i < StudentInformation.all_student.size(); i++) {
+//				学号相同则删除学生信息
+				if (jtextfield_1.getText().equals("" + StudentInformation.all_student.get(i).get_Id())) {
+//					删除信息
+					StudentInformation.all_student.remove(i);
+					JOptionPane.showMessageDialog(null, "删除学生信息成功！！！", "提示", JOptionPane.PLAIN_MESSAGE);
+					return;// 结束
+				}
+			}
+//			未查询到学生，提示
+			JOptionPane.showMessageDialog(jbutton_5, "未查询到当前学生！！！\n删除失败！！！", "消息提示", JOptionPane.WARNING_MESSAGE);
+		} else {
+			jtextfield_1.setText("");
+		}
+	}
 }
