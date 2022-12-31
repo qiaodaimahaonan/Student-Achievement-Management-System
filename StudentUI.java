@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -56,9 +57,11 @@ public class StudentUI {
 		JMenu men_2 = new JMenu("排序");
 //		子菜单
 		JMenuItem item_1 = new JMenuItem("添加学生");
+		JMenuItem item_2 = new JMenuItem("导入成绩");
 
 //		定义字体
 		Font font = new Font("黑体", Font.PLAIN, 15);
+		item_2.setFont(font);
 
 //		设置菜单字体
 		men_1.setFont(font);
@@ -67,6 +70,7 @@ public class StudentUI {
 
 //		加入
 		men_1.add(item_1);
+		men_1.add(item_2);
 
 		bar.add(men_1);
 		bar.add(men_2);
@@ -108,6 +112,30 @@ public class StudentUI {
 			}
 		});
 
+		// 导入成绩 按钮监听
+		item_2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String[] options = { "离散数学", "Java", "体育", "英语" };
+				String s = (String) JOptionPane.showInputDialog(null, "请输入你的选项：", "提示", JOptionPane.QUESTION_MESSAGE,
+						null, options, null);
+				if (s != null) {
+					int i = 0;
+					if (s.equals("Java")) {
+						i = 4;
+					} else if (s.equals("体育")) {
+						i = 5;
+					} else if (s.equals("离散数学")) {
+						i = 6;
+					} else if (s.equals("英语")) {
+						i = 7;
+					}
+					StudentUI.init_3(i);
+				}
+			}
+		});
 	}
 
 //	添加学生界面
@@ -167,6 +195,51 @@ public class StudentUI {
 		StudentListen e_1 = new StudentListen(jp1, jbutton_1, jbutton_2, jtextfield);
 		jbutton_1.addActionListener(e_1);
 		jbutton_2.addActionListener(e_1);
+	}
+
+	// 导入成绩界面
+	public static void init_3(int i) {
+
+//		清空组件
+		StudentUI.jpanel_1.removeAll();
+//		刷新面板
+		StudentUI.jpanel_1.updateUI();
+
+		int num = StudentInformation.all_student.size();
+//		文本框
+		JTextField jtextfield[] = new JTextField[num];
+
+		if (i == 4) {
+			JLabel jlabel1 = new JLabel("导入java成绩                                ");
+			StudentUI.jpanel_1.add(jlabel1);
+		} else if (i == 5) {
+			JLabel jlabel1 = new JLabel("导入体育成绩                                ");
+			StudentUI.jpanel_1.add(jlabel1);
+		} else if (i == 6) {
+			JLabel jlabel1 = new JLabel("导入离散成绩                                ");
+			StudentUI.jpanel_1.add(jlabel1);
+		} else if (i == 7) {
+			JLabel jlabel1 = new JLabel("导入英语成绩                                ");
+			StudentUI.jpanel_1.add(jlabel1);
+		}
+//		实例化
+		for (int j = 0; j < num; j++) {
+			jtextfield[j] = new JTextField(12);
+			jpanel_1.add(jtextfield[j]);
+		}
+
+//		按钮
+		JButton jbutton_3 = new JButton("提交");
+		JButton jbutton_4 = new JButton("清除");
+//		加入按钮
+		jpanel_1.add(jbutton_3);
+		jpanel_1.add(jbutton_4);
+
+//		注册监听
+		StudentListen_4 e_4 = new StudentListen_4(jbutton_3, jbutton_4, jtextfield, i);
+		jbutton_3.addActionListener(e_4);
+		jbutton_4.addActionListener(e_4);
+
 	}
 
 }
