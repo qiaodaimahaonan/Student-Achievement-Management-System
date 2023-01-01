@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -63,6 +65,7 @@ public class StudentUI {
 		JMenuItem item_4 = new JMenuItem("删除学生");
 		JMenuItem item_5 = new JMenuItem("查询成绩");
 		JMenuItem item_6 = new JMenuItem("学习情况报表");
+		JMenuItem item_7 = new JMenuItem("保存");
 
 //		定义字体
 		Font font = new Font("黑体", Font.PLAIN, 15);
@@ -77,6 +80,7 @@ public class StudentUI {
 		item_4.setFont(font);
 		item_5.setFont(font);
 		item_6.setFont(font);
+		item_7.setFont(font);
 
 //		加入
 		men_1.add(item_1);
@@ -85,6 +89,7 @@ public class StudentUI {
 		men_1.add(item_4);
 		men_1.add(item_5);
 		men_1.add(item_6);
+		men_1.add(item_7);
 
 		bar.add(men_1);
 		bar.add(men_2);
@@ -196,6 +201,15 @@ public class StudentUI {
 
 				StudentUI.init_8(StudentInformation.all_student);
 
+			}
+		});
+//		保存 按钮的监听
+		item_7.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				StudentUI.init_9();
 			}
 		});
 
@@ -656,4 +670,91 @@ public class StudentUI {
 //	显示窗口
 		j.setVisible(true);
 	}
+
+//	保存学生信息界面
+	public static void init_9() {
+
+		// 建立输出
+		FileOutputStream out = null;
+		try {
+			// 设置路径文件名
+			out = new FileOutputStream("D:\\studentMessage_1.txt");
+			String student;
+			String explain = "本次保存信息如下：\n";
+			byte buf[] = explain.getBytes();
+			out.write(buf);
+			for (int i = StudentInformation.all_student.size() - 1; i >= 0; i--) {
+				// 创建缓冲区,写入数据
+				student = "学号：" + StudentInformation.all_student.get(i).get_Id() + "   ";
+				byte buffer[] = student.getBytes();
+				out.write(buffer);
+
+				student = "姓名：" + StudentInformation.all_student.get(i).get_Name() + "   ";
+				byte buffer1[] = student.getBytes();
+				out.write(buffer1);
+
+				student = "性别：" + StudentInformation.all_student.get(i).getGender() + "   ";
+				byte buffer2[] = student.getBytes();
+				out.write(buffer2);
+
+				student = "出生日期：" + StudentInformation.all_student.get(i).getDate() + "   ";
+				byte buffer3[] = student.getBytes();
+				out.write(buffer3);
+
+				if (StudentInformation.all_student.get(i).get_java() < 0) {
+					student = "java：" + "\\   ";
+				} else
+					student = "java：" + StudentInformation.all_student.get(i).get_java() + "   ";
+				byte buffer4[] = student.getBytes();
+				out.write(buffer4);
+
+				if (StudentInformation.all_student.get(i).get_physical() < 0) {
+					student = "体育：" + "\\   ";
+				} else
+					student = "体育：" + StudentInformation.all_student.get(i).get_physical() + "   ";
+				byte buffer5[] = student.getBytes();
+				out.write(buffer5);
+
+				if (StudentInformation.all_student.get(i).get_Discrete_Mathematics() < 0) {
+					student = "离散数学：" + "\\   ";
+				} else
+					student = "离散数学：" + StudentInformation.all_student.get(i).get_Discrete_Mathematics() + "   ";
+				byte buffer6[] = student.getBytes();
+				out.write(buffer6);
+
+				if (StudentInformation.all_student.get(i).get_English() < 0) {
+					student = "英语：" + "\\   ";
+				} else
+					student = "英语：" + StudentInformation.all_student.get(i).get_English() + "   ";
+				byte buffer7[] = student.getBytes();
+				out.write(buffer7);
+
+				if (StudentInformation.all_student.get(i).get_Total() < 0) {
+					student = "总分：" + "\\   ";
+				} else
+					student = "总分：" + StudentInformation.all_student.get(i).get_Total() + "   ";
+				byte buffer8[] = student.getBytes();
+				out.write(buffer8);
+
+				// 换行
+				out.write('\n');
+			}
+			// 换行
+			out.write('\n');
+			out.write('\n');
+			JOptionPane.showMessageDialog(null, "保存成功！！！\n保存路径为：D:\\\\studentMessage_1.txt", "提示",
+					JOptionPane.PLAIN_MESSAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (out != null)
+					out.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+	}
+
 }
