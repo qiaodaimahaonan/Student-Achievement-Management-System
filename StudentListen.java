@@ -3,6 +3,7 @@ package myproject;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -280,6 +281,98 @@ class StudentListen_4 implements ActionListener {
 			JOptionPane.showMessageDialog(jbutton_5, "未查询到当前学生！！！\n删除失败！！！", "消息提示", JOptionPane.WARNING_MESSAGE);
 		} else {
 			jtextfield_1.setText("");
+		}
+	}
+}
+
+//查询学生的 查询按钮 的监听
+class StudentListen_5 implements ActionListener {
+
+	JButton jbutton_8;
+	JButton jbutton_9;
+	JTextField jtextfield[];
+
+	public StudentListen_5(JButton jbutton_8, JButton jbutton_9, JTextField jtextfield[]) {
+		this.jbutton_8 = jbutton_8;
+		this.jbutton_9 = jbutton_9;
+		this.jtextfield = jtextfield;
+	}
+
+//	点击了 查询学生的查询 按钮
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+//		点击了 查询 按钮
+		if (e.getSource() == jbutton_8) {
+			for (int i = 0; i < StudentInformation.all_student.size(); i++) {
+//				学号相同则输出学生信息
+				if (jtextfield[0].getText().equals("" + StudentInformation.all_student.get(i).get_Id())) {
+//					输出信息到文本框
+					jtextfield[1].setText(StudentInformation.all_student.get(i).get_Name());
+					if (StudentInformation.all_student.get(i).get_java() < 0) {
+						jtextfield[2].setText("\\");
+					} else
+						jtextfield[2].setText("" + StudentInformation.all_student.get(i).get_java());
+					if (StudentInformation.all_student.get(i).get_physical() < 0) {
+						jtextfield[3].setText("\\");
+					} else
+						jtextfield[3].setText("" + StudentInformation.all_student.get(i).get_physical());
+					if (StudentInformation.all_student.get(i).get_Discrete_Mathematics() < 0) {
+						jtextfield[4].setText("\\");
+					} else
+						jtextfield[4].setText("" + StudentInformation.all_student.get(i).get_Discrete_Mathematics());
+					if (StudentInformation.all_student.get(i).get_English() < 0) {
+						jtextfield[5].setText("\\");
+					} else
+						jtextfield[5].setText("" + StudentInformation.all_student.get(i).get_English());
+					if (StudentInformation.all_student.get(i).get_Total() < 0) {
+						jtextfield[6].setText("\\");
+					} else
+						jtextfield[6].setText("" + StudentInformation.all_student.get(i).get_Total());
+					return;// 结束
+				}
+			}
+//			未查询到学生，提示
+			JOptionPane.showMessageDialog(null, "未查询到该学生！！！", "消息提示", JOptionPane.WARNING_MESSAGE);
+		} else if (e.getSource() == jbutton_9) {
+			jtextfield[0].setText("");
+		}
+	}
+
+}
+
+//点击了按名字查询的查询按钮
+class StudentListen_6 implements ActionListener {
+	JButton jbutton_13;
+	JButton jbutton_14;
+	JTextField jtextfield;
+
+	public StudentListen_6(JButton jbutton_13, JButton jbutton_14, JTextField jtextfield) {
+		this.jbutton_13 = jbutton_13;
+		this.jbutton_14 = jbutton_14;
+		this.jtextfield = jtextfield;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO 自动生成的方法存根
+		if (e.getSource() == jbutton_13) {
+			boolean flag = false;
+			ArrayList<StudentInformation> select_student = new ArrayList<StudentInformation>();
+			for (int i = 0; i < StudentInformation.all_student.size(); i++) {
+//				如果包含学生姓名
+				if (StudentInformation.all_student.get(i).get_Name().contains(jtextfield.getText())) {
+//					输出信息到文本框
+					flag = true;
+					select_student.add(StudentInformation.all_student.get(i));
+				}
+			}
+			if (flag) {
+				StudentUI.init_13(select_student);
+			} else
+				JOptionPane.showMessageDialog(null, "未查询到该学生！！！", "消息提示", JOptionPane.WARNING_MESSAGE);
+		} else if (e.getSource() == jbutton_14) {
+			jtextfield.setText("");
 		}
 	}
 }
