@@ -3,7 +3,9 @@ package myproject;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -31,6 +33,15 @@ public class StudentListen implements ActionListener {
 //		点击了提交按钮
 		if (e.getSource() == jbutton_1) {
 
+			// 判断学生姓名是否为空
+			if (jtextfield[1].getText().trim().equals("")) {
+				JOptionPane.showMessageDialog(null, "请输入学生姓名", "提示", JOptionPane.PLAIN_MESSAGE);
+				return;
+			} else if (jtextfield[1].getText().matches("\\d+")) {
+				JOptionPane.showMessageDialog(null, "请输入正确的学生姓名", "提示", JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
+
 			// 判断是否进行了性别选择并读取选择
 			String str = "";
 			Component[] jcbs = jp1.getComponents();// 将勾选的内容存入数组
@@ -40,12 +51,35 @@ public class StudentListen implements ActionListener {
 					str += jcb.getText() + "";
 				}
 			}
+			if (str.equals("")) {
+				JOptionPane.showMessageDialog(null, "请选择学生性别", "提示", JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
+
+			// 对出生日期进行输入格式，是否大于今天日期，是否合法进行判断
+			Date dateofbirth = null;
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+			try {
+				dateFormat.setLenient(false);
+				dateofbirth = dateFormat.parse(jtextfield[3].getText());
+				Date today = new Date();
+				if (dateofbirth.after(today)) {
+					JOptionPane.showMessageDialog(null, "出生日期不能在今天之后，请输入正确的日期格式（yyyy/mm/dd）", "提示",
+							JOptionPane.PLAIN_MESSAGE);
+					return;
+				}
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, "请输入正确的日期格式（yyyy/mm/dd）", "提示", JOptionPane.PLAIN_MESSAGE);
+				e1.printStackTrace();
+				return;
+			}
 
 			StudentInformation student = new StudentInformation(Integer.parseInt(jtextfield[0].getText()),
 					jtextfield[1].getText(), str, jtextfield[3].getText(), -1, -1, -1, -1, -1);
 //				将学生对象加入总对象中
 			StudentInformation.all_student.add(student);
 			JOptionPane.showMessageDialog(null, "添加学生成功！！！", "提示", JOptionPane.PLAIN_MESSAGE);
+			StudentUI.init_10();
 			StudentInformation.ID++;
 		}
 		StudentUI.init_2();
@@ -56,14 +90,14 @@ public class StudentListen implements ActionListener {
 //点击了导入成绩的提交按钮
 class StudentListen_2 implements ActionListener {
 
-	JButton jbutton_3;
-	JButton jbutton_4;
+	JButton jbutton_11;
+	JButton jbutton_12;
 	JTextField jtextfield[];
 	int i;// 表示学科
 
-	public StudentListen_2(JButton jbutton_3, JButton jbutton_4, JTextField jtextfield[], int i) {
-		this.jbutton_3 = jbutton_3;
-		this.jbutton_4 = jbutton_4;
+	public StudentListen_2(JButton jbutton_11, JButton jbutton_12, JTextField jtextfield[], int i) {
+		this.jbutton_11 = jbutton_11;
+		this.jbutton_12 = jbutton_12;
 		this.jtextfield = jtextfield;
 		this.i = i;
 	}
@@ -74,7 +108,7 @@ class StudentListen_2 implements ActionListener {
 
 		boolean flag = true;
 //		点击了 提交 按钮
-		if (e.getSource() == jbutton_3) {
+		if (e.getSource() == jbutton_11) {
 			if (i == 4) {
 				for (int j = 0; j < StudentInformation.all_student.size(); j++) {
 					jtextfield[j].setText(jtextfield[j].getText().replaceAll(" ", ""));// 去除成绩中误输的空格
@@ -153,6 +187,7 @@ class StudentListen_2 implements ActionListener {
 			}
 			if (flag) {
 				JOptionPane.showMessageDialog(null, "成功添加成绩！！！", "提示", JOptionPane.PLAIN_MESSAGE);
+				StudentUI.init_10();
 			} else
 				JOptionPane.showMessageDialog(null, "请输入正确的学生成绩", "提示", JOptionPane.PLAIN_MESSAGE);
 		} else {
@@ -161,21 +196,23 @@ class StudentListen_2 implements ActionListener {
 				jtextfield[j].setText("");
 			}
 		}
+
 	}
+
 }
 
-//点击了修改学生的修改按钮
+// 点击了修改学生的修改按钮
 class StudentListen_3 implements ActionListener {
 
-	JButton jbutton_5;
-	JButton jbutton_6;
+	JButton jbutton_3;
+	JButton jbutton_4;
 	JTextField jtextfield[];
 	JPanel jp2;
 
-	public StudentListen_3(JPanel jp2, JButton jbutton_5, JButton jbutton_6, JTextField jtextfield[]) {
+	public StudentListen_3(JPanel jp2, JButton jbutton_3, JButton jbutton_4, JTextField jtextfield[]) {
 		this.jp2 = jp2;
-		this.jbutton_5 = jbutton_5;
-		this.jbutton_6 = jbutton_6;
+		this.jbutton_3 = jbutton_3;
+		this.jbutton_4 = jbutton_4;
 		this.jtextfield = jtextfield;
 	}
 
@@ -183,11 +220,20 @@ class StudentListen_3 implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 //		点击了 修改 按钮
-		if (e.getSource() == jbutton_5) {
+		if (e.getSource() == jbutton_3) {
 			for (int i = 0; i < StudentInformation.all_student.size(); i++) {
 //				学号相同则修改学生信息
 				if (jtextfield[0].getText().equals("" + StudentInformation.all_student.get(i).get_Id())) {
 //					修改信息(学号不可修改,总分重新计算)
+
+					// 判断学生姓名是否为空
+					if (jtextfield[1].getText().trim().equals("")) {
+						JOptionPane.showMessageDialog(null, "请输入学生姓名", "提示", JOptionPane.PLAIN_MESSAGE);
+						return;
+					} else if (jtextfield[1].getText().matches("\\d+")) {
+						JOptionPane.showMessageDialog(null, "请输入正确的学生姓名", "提示", JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
 
 					// 判断是否进行了性别选择并读取选择
 					String str = "";
@@ -200,6 +246,24 @@ class StudentListen_3 implements ActionListener {
 					}
 					if (str.equals("")) {
 						JOptionPane.showMessageDialog(null, "请选择学生性别", "提示", JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
+
+					// 对出生日期进行输入格式，是否大于今天日期，是否合法进行判断
+					Date dateofbirth = null;
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+					try {
+						dateFormat.setLenient(false);
+						dateofbirth = dateFormat.parse(jtextfield[3].getText());
+						Date today = new Date();
+						if (dateofbirth.after(today)) {
+							JOptionPane.showMessageDialog(null, "出生日期不能在今天之后，请输入正确的日期格式（yyyy/mm/dd）", "提示",
+									JOptionPane.PLAIN_MESSAGE);
+							return;
+						}
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "请输入正确的日期格式（yyyy/mm/dd）", "提示", JOptionPane.PLAIN_MESSAGE);
+						e1.printStackTrace();
 						return;
 					}
 
@@ -220,6 +284,12 @@ class StudentListen_3 implements ActionListener {
 						return;
 					}
 
+					// 去除输入成绩时误输入的空格
+					jtextfield[4].setText(jtextfield[4].getText().replaceAll(" ", ""));
+					jtextfield[5].setText(jtextfield[5].getText().replaceAll(" ", ""));
+					jtextfield[6].setText(jtextfield[6].getText().replaceAll(" ", ""));
+					jtextfield[7].setText(jtextfield[7].getText().replaceAll(" ", ""));
+
 					StudentInformation.all_student.get(i).set_Name(jtextfield[1].getText());
 					StudentInformation.all_student.get(i).setGender(str);
 					StudentInformation.all_student.get(i).setDate(jtextfield[3].getText());
@@ -238,6 +308,7 @@ class StudentListen_3 implements ActionListener {
 					StudentInformation.all_student.get(i).set_Total(sum);
 //						提示
 					JOptionPane.showMessageDialog(null, "修改学生信息成功！！！", "提示", JOptionPane.PLAIN_MESSAGE);
+					StudentUI.init_10();
 					StudentUI.init_4();
 					return;
 				}
@@ -248,6 +319,7 @@ class StudentListen_3 implements ActionListener {
 			jtextfield[0].setText("");
 		}
 	}
+
 }
 
 //点击了删除学生的删除按钮
@@ -274,6 +346,7 @@ class StudentListen_4 implements ActionListener {
 //					删除信息
 					StudentInformation.all_student.remove(i);
 					JOptionPane.showMessageDialog(null, "删除学生信息成功！！！", "提示", JOptionPane.PLAIN_MESSAGE);
+					StudentUI.init_10();
 					return;// 结束
 				}
 			}
@@ -283,9 +356,10 @@ class StudentListen_4 implements ActionListener {
 			jtextfield_1.setText("");
 		}
 	}
+
 }
 
-//查询学生的 查询按钮 的监听
+// 查询学生的 查询按钮 的监听
 class StudentListen_5 implements ActionListener {
 
 	JButton jbutton_8;
@@ -375,4 +449,5 @@ class StudentListen_6 implements ActionListener {
 			jtextfield.setText("");
 		}
 	}
+
 }
