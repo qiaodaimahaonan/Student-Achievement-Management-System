@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -38,6 +40,19 @@ public class StudentUI {
 
 //		实例化
 		StudentUI ui = new StudentUI();
+
+//自动保存		
+		Timer timer = new Timer();
+		// 间隔周期(/毫秒数)
+		long intevalPeriod = 600 * 1000;
+		// 每十分钟执行一次
+		TimerTask task = new TimerTask() {
+			public void run() {
+				init_9();
+			}
+		};
+		timer.scheduleAtFixedRate(task, intevalPeriod, intevalPeriod);
+
 //		调用方法
 		ui.init_1();
 	}
@@ -70,10 +85,8 @@ public class StudentUI {
 		JMenuItem item_8 = new JMenuItem("按学号升序");
 		JMenuItem item_9 = new JMenuItem("按总分降序");
 		JMenuItem item_10 = new JMenuItem("按某科目降序");
-
 //		定义字体
 		Font font = new Font("黑体", Font.PLAIN, 15);
-		item_2.setFont(font);
 
 //		设置菜单字体
 		men_1.setFont(font);
@@ -88,7 +101,6 @@ public class StudentUI {
 		item_8.setFont(font);
 		item_9.setFont(font);
 		item_10.setFont(font);
-
 //		加入
 		men_1.add(item_1);
 		men_1.add(item_2);
@@ -141,13 +153,13 @@ public class StudentUI {
 				StudentUI.init_2();
 			}
 		});
-
 		// 导入成绩 按钮监听
 		item_2.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				init_10();
 				String[] options = { "离散数学", "Java", "体育", "英语" };
 				String s = (String) JOptionPane.showInputDialog(null, "请输入你的选项：", "提示", JOptionPane.QUESTION_MESSAGE,
 						null, options, null);
@@ -166,7 +178,6 @@ public class StudentUI {
 				}
 			}
 		});
-
 //		注册 修改学生 按钮的监听
 		item_3.addActionListener(new ActionListener() {
 
@@ -210,6 +221,7 @@ public class StudentUI {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 
+				StudentUI.init_11();
 				StudentUI.init_8(StudentInformation.all_student);
 
 			}
@@ -350,16 +362,16 @@ public class StudentUI {
 		}
 
 //		按钮
-		JButton jbutton_3 = new JButton("提交");
-		JButton jbutton_4 = new JButton("清除");
+		JButton jbutton_11 = new JButton("提交");
+		JButton jbutton_12 = new JButton("清除");
 //		加入按钮
-		jpanel_1.add(jbutton_3);
-		jpanel_1.add(jbutton_4);
+		jpanel_1.add(jbutton_11);
+		jpanel_1.add(jbutton_12);
 
 //		注册监听
-		StudentListen_2 e_2 = new StudentListen_2(jbutton_3, jbutton_4, jtextfield, i);
-		jbutton_3.addActionListener(e_2);
-		jbutton_4.addActionListener(e_2);
+		StudentListen_2 e_2 = new StudentListen_2(jbutton_11, jbutton_12, jtextfield, i);
+		jbutton_11.addActionListener(e_2);
+		jbutton_12.addActionListener(e_2);
 
 	}
 
@@ -388,10 +400,10 @@ public class StudentUI {
 //		文本框
 		JTextField jtextfield[] = new JTextField[StudentInformation.number];
 //		按钮
-		JButton jbutton_5 = new JButton("修改");
-		JButton jbutton_6 = new JButton("清除");
-		jbutton_5.setFont(font);
-		jbutton_6.setFont(font);
+		JButton jbutton_3 = new JButton("修改");
+		JButton jbutton_4 = new JButton("清除");
+		jbutton_3.setFont(font);
+		jbutton_4.setFont(font);
 		JPanel jp2 = new JPanel();
 
 		JLabel jlabel1 = new JLabel("修改信息                                        ");
@@ -428,12 +440,12 @@ public class StudentUI {
 		jtextfield[StudentInformation.number - 1].setText("自动计算，无需输入");
 		jtextfield[StudentInformation.number - 1].setEditable(false);
 
-		StudentUI.jpanel_1.add(jbutton_5);
-		StudentUI.jpanel_1.add(jbutton_6);
+		StudentUI.jpanel_1.add(jbutton_3);
+		StudentUI.jpanel_1.add(jbutton_4);
 //		注册监听
-		StudentListen_3 e_3 = new StudentListen_3(jp2, jbutton_5, jbutton_6, jtextfield);
-		jbutton_5.addActionListener(e_3);
-		jbutton_6.addActionListener(e_3);
+		StudentListen_3 e_3 = new StudentListen_3(jp2, jbutton_3, jbutton_4, jtextfield);
+		jbutton_3.addActionListener(e_3);
+		jbutton_4.addActionListener(e_3);
 	}
 
 //	删除 学生界面
@@ -648,73 +660,6 @@ public class StudentUI {
 		j.setVisible(true);
 	}
 
-//输出全部学生界面
-	public static void init_13(ArrayList<StudentInformation> select_student) {
-
-		// 设置容器
-		JFrame j = new JFrame("学生信息");
-		j.setSize(615, 335);
-		j.setLayout(null);
-		// 窗口不能调整
-		j.setResizable(false);
-
-		// 设置文本区用于显示所有学生信息
-		JTextArea j_2 = new JTextArea("文本区可以滑动！！！\n关闭当前窗口，再次点击查询所有学生按钮可以刷新！！！\n-----------------------------------\n");
-		// 设置文本区不能编辑
-		j_2.setEditable(false);
-		// 将j1作为可滚动面板sp的显示区域
-		JScrollPane sp = new JScrollPane(j_2);
-		sp.setLocation(0, 0);
-		sp.setSize(600, 300);
-		j.add(sp);
-
-		// 学生当前总人数
-		j_2.append("学生当前总人数为：" + select_student.size() + "\n\n");
-
-		String s[] = new String[StudentInformation.number];
-		s[0] = "学号：";
-		s[1] = "姓名：";
-		s[2] = "性别：";
-		s[3] = "出生日期：";
-		s[4] = "java：";
-		s[5] = "体育：";
-		s[6] = "离散数学：";
-		s[7] = "英语：";
-		s[8] = "总分：";
-
-//	将信息添加到滚动文本区
-		for (int i = 0; i < select_student.size(); i++) {
-			j_2.append(s[0] + select_student.get(i).get_Id() + "    ");
-			j_2.append(s[1] + select_student.get(i).get_Name() + "    ");
-			j_2.append(s[2] + select_student.get(i).getGender() + "    ");
-			j_2.append(s[3] + select_student.get(i).getDate() + "    ");
-			if (select_student.get(i).get_java() < 0) {
-				j_2.append(s[4] + "\\    ");
-			} else
-				j_2.append(s[4] + select_student.get(i).get_java() + "    ");
-			if (select_student.get(i).get_physical() < 0) {
-				j_2.append(s[5] + "\\    ");
-			} else
-				j_2.append(s[5] + select_student.get(i).get_physical() + "    ");
-			if (select_student.get(i).get_Discrete_Mathematics() < 0) {
-				j_2.append(s[6] + "\\    ");
-			} else
-				j_2.append(s[6] + select_student.get(i).get_Discrete_Mathematics() + "    ");
-			if (select_student.get(i).get_English() < 0) {
-				j_2.append(s[7] + "\\    ");
-			} else
-				j_2.append(s[7] + select_student.get(i).get_English() + "    ");
-			if (select_student.get(i).get_Total() < 0) {
-				j_2.append(s[8] + "\\    \n");
-			} else
-				j_2.append(s[8] + select_student.get(i).get_Total() + "\n");
-		}
-//	居中显示
-		j.setLocationRelativeTo(null);
-//	显示窗口
-		j.setVisible(true);
-	}
-
 //	保存学生信息界面
 	public static void init_9() {
 
@@ -798,6 +743,7 @@ public class StudentUI {
 				ex.printStackTrace();
 			}
 		}
+
 	}
 
 	// 按学号排序界面
@@ -1021,5 +967,72 @@ public class StudentUI {
 			} else
 				j_1.append(s[8] + StudentInformation.all_student.get(i).get_Total() + "\n");
 		}
+	}
+
+//	输出全部学生界面
+	public static void init_13(ArrayList<StudentInformation> select_student) {
+
+		// 设置容器
+		JFrame j = new JFrame("学生信息");
+		j.setSize(615, 335);
+		j.setLayout(null);
+		// 窗口不能调整
+		j.setResizable(false);
+
+		// 设置文本区用于显示所有学生信息
+		JTextArea j_2 = new JTextArea("文本区可以滑动！！！\n关闭当前窗口，再次点击查询所有学生按钮可以刷新！！！\n-----------------------------------\n");
+		// 设置文本区不能编辑
+		j_2.setEditable(false);
+		// 将j1作为可滚动面板sp的显示区域
+		JScrollPane sp = new JScrollPane(j_2);
+		sp.setLocation(0, 0);
+		sp.setSize(600, 300);
+		j.add(sp);
+
+		// 学生当前总人数
+		j_2.append("学生当前总人数为：" + select_student.size() + "\n\n");
+
+		String s[] = new String[StudentInformation.number];
+		s[0] = "学号：";
+		s[1] = "姓名：";
+		s[2] = "性别：";
+		s[3] = "出生日期：";
+		s[4] = "java：";
+		s[5] = "体育：";
+		s[6] = "离散数学：";
+		s[7] = "英语：";
+		s[8] = "总分：";
+
+//		将信息添加到滚动文本区
+		for (int i = 0; i < select_student.size(); i++) {
+			j_2.append(s[0] + select_student.get(i).get_Id() + "    ");
+			j_2.append(s[1] + select_student.get(i).get_Name() + "    ");
+			j_2.append(s[2] + select_student.get(i).getGender() + "    ");
+			j_2.append(s[3] + select_student.get(i).getDate() + "    ");
+			if (select_student.get(i).get_java() < 0) {
+				j_2.append(s[4] + "\\    ");
+			} else
+				j_2.append(s[4] + select_student.get(i).get_java() + "    ");
+			if (select_student.get(i).get_physical() < 0) {
+				j_2.append(s[5] + "\\    ");
+			} else
+				j_2.append(s[5] + select_student.get(i).get_physical() + "    ");
+			if (select_student.get(i).get_Discrete_Mathematics() < 0) {
+				j_2.append(s[6] + "\\    ");
+			} else
+				j_2.append(s[6] + select_student.get(i).get_Discrete_Mathematics() + "    ");
+			if (select_student.get(i).get_English() < 0) {
+				j_2.append(s[7] + "\\    ");
+			} else
+				j_2.append(s[7] + select_student.get(i).get_English() + "    ");
+			if (select_student.get(i).get_Total() < 0) {
+				j_2.append(s[8] + "\\    \n");
+			} else
+				j_2.append(s[8] + select_student.get(i).get_Total() + "\n");
+		}
+//		居中显示
+		j.setLocationRelativeTo(null);
+//		显示窗口
+		j.setVisible(true);
 	}
 }
