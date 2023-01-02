@@ -67,6 +67,10 @@ public class StudentUI {
 		JMenuItem item_6 = new JMenuItem("学习情况报表");
 		JMenuItem item_7 = new JMenuItem("保存");
 
+		JMenuItem item_8 = new JMenuItem("按学号升序");
+		JMenuItem item_9 = new JMenuItem("按总分降序");
+		JMenuItem item_10 = new JMenuItem("按某科目降序");
+
 //		定义字体
 		Font font = new Font("黑体", Font.PLAIN, 15);
 		item_2.setFont(font);
@@ -81,6 +85,9 @@ public class StudentUI {
 		item_5.setFont(font);
 		item_6.setFont(font);
 		item_7.setFont(font);
+		item_8.setFont(font);
+		item_9.setFont(font);
+		item_10.setFont(font);
 
 //		加入
 		men_1.add(item_1);
@@ -90,6 +97,10 @@ public class StudentUI {
 		men_1.add(item_5);
 		men_1.add(item_6);
 		men_1.add(item_7);
+
+		men_2.add(item_8);
+		men_2.add(item_9);
+		men_2.add(item_10);
 
 		bar.add(men_1);
 		bar.add(men_2);
@@ -212,7 +223,40 @@ public class StudentUI {
 				StudentUI.init_9();
 			}
 		});
+		// 按学号排序 按钮监听
+		item_8.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				StudentUI.init_10();
+
+			}
+		});
+//		按 总分降序按钮 的监听
+		item_9.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				StudentUI.init_11();
+			}
+		});
+//		按 某科降序按钮 的监听
+		item_10.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String[] options = { "java", "体育", "离散数学", "英语" };
+				String s = (String) JOptionPane.showInputDialog(null, "请输入你的选项：", "提示", JOptionPane.QUESTION_MESSAGE,
+						null, options, null);
+				if (s != null) {
+					StudentUI.init_12(s);
+				}
+			}
+		});
 	}
 
 //	添加学生界面
@@ -754,7 +798,228 @@ public class StudentUI {
 				ex.printStackTrace();
 			}
 		}
-
 	}
 
+	// 按学号排序界面
+	public static void init_10() {
+//		清空文本区
+		StudentUI.j_1.setText("");
+//		暂时存储信息
+		StudentInformation student = new StudentInformation();
+
+		String s[] = new String[StudentInformation.number];
+		s[0] = "学号：";
+		s[1] = "姓名：";
+		s[2] = "性别：";
+		s[3] = "出生日期：";
+		s[4] = "java：";
+		s[5] = "体育：";
+		s[6] = "离散数学：";
+		s[7] = "英语：";
+		s[8] = "总分：";
+
+		for (int i = 0; i < StudentInformation.all_student.size() - 1; i++) {
+			for (int j = 0; j < StudentInformation.all_student.size() - 1; j++) {
+				if (StudentInformation.all_student.get(j).get_Id() > StudentInformation.all_student.get(j + 1)
+						.get_Id()) {
+					student = StudentInformation.all_student.get(j);
+					StudentInformation.all_student.set(j, StudentInformation.all_student.get(j + 1));
+					StudentInformation.all_student.set(j + 1, student);
+				}
+			}
+		}
+
+		j_1.append("按学号排序\n-----------------------------------\n");
+//		将结果展现在文本区
+		for (int i = 0; i < StudentInformation.all_student.size(); i++) {
+//			添加信息
+			j_1.append(s[0] + StudentInformation.all_student.get(i).get_Id() + "    ");
+			j_1.append(s[1] + StudentInformation.all_student.get(i).get_Name() + "    ");
+			j_1.append(s[2] + StudentInformation.all_student.get(i).getGender() + "    ");
+			j_1.append(s[3] + StudentInformation.all_student.get(i).getDate() + "    ");
+			if (StudentInformation.all_student.get(i).get_java() < 0) {
+				j_1.append(s[4] + "\\" + "    ");
+			} else
+				j_1.append(s[4] + StudentInformation.all_student.get(i).get_java() + "    ");
+			if (StudentInformation.all_student.get(i).get_physical() < 0) {
+				j_1.append(s[5] + "\\" + "    ");
+			} else
+				j_1.append(s[5] + StudentInformation.all_student.get(i).get_physical() + "    ");
+			if (StudentInformation.all_student.get(i).get_Discrete_Mathematics() < 0) {
+				j_1.append(s[6] + "\\" + "    ");
+			} else
+				j_1.append(s[6] + StudentInformation.all_student.get(i).get_Discrete_Mathematics() + "    ");
+			if (StudentInformation.all_student.get(i).get_English() < 0) {
+				j_1.append(s[7] + "\\" + "    ");
+			} else
+				j_1.append(s[7] + StudentInformation.all_student.get(i).get_English() + "    ");
+			if (StudentInformation.all_student.get(i).get_Total() < 0) {
+				j_1.append(s[8] + "\\" + "\n");
+			} else
+				j_1.append(s[8] + StudentInformation.all_student.get(i).get_Total() + "\n");
+		}
+	}
+
+//	按总分降序排序界面
+	public static void init_11() {
+//		清空文本区
+		StudentUI.j_1.setText("");
+//		暂时存储信息
+		StudentInformation student = new StudentInformation();
+//		冒泡排序法
+		for (int i = 0; i < StudentInformation.all_student.size() - 1; i++) {
+			for (int j = 0; j < StudentInformation.all_student.size() - 1; j++) {
+				if (StudentInformation.all_student.get(j).get_Total() < StudentInformation.all_student.get(j + 1)
+						.get_Total()) {
+					student = StudentInformation.all_student.get(j);
+					StudentInformation.all_student.set(j, StudentInformation.all_student.get(j + 1));
+					StudentInformation.all_student.set(j + 1, student);
+				}
+			}
+		}
+
+		String s[] = new String[StudentInformation.number];
+		s[0] = "学号：";
+		s[1] = "姓名：";
+		s[2] = "性别：";
+		s[3] = "出生日期：";
+		s[4] = "java：";
+		s[5] = "体育：";
+		s[6] = "离散数学：";
+		s[7] = "英语：";
+		s[8] = "总分：";
+
+		j_1.append("按总分降序排序\n-----------------------------------\n");
+
+//		将结果展现在文本区
+		for (int i = 0; i < StudentInformation.all_student.size(); i++) {
+//			添加信息
+			j_1.append(s[0] + StudentInformation.all_student.get(i).get_Id() + "    ");
+			j_1.append(s[1] + StudentInformation.all_student.get(i).get_Name() + "    ");
+			j_1.append(s[2] + StudentInformation.all_student.get(i).getGender() + "    ");
+			j_1.append(s[3] + StudentInformation.all_student.get(i).getDate() + "    ");
+			if (StudentInformation.all_student.get(i).get_java() < 0) {
+				j_1.append(s[4] + "\\" + "    ");
+			} else
+				j_1.append(s[4] + StudentInformation.all_student.get(i).get_java() + "    ");
+			if (StudentInformation.all_student.get(i).get_physical() < 0) {
+				j_1.append(s[5] + "\\" + "    ");
+			} else
+				j_1.append(s[5] + StudentInformation.all_student.get(i).get_physical() + "    ");
+			if (StudentInformation.all_student.get(i).get_Discrete_Mathematics() < 0) {
+				j_1.append(s[6] + "\\" + "    ");
+			} else
+				j_1.append(s[6] + StudentInformation.all_student.get(i).get_Discrete_Mathematics() + "    ");
+			if (StudentInformation.all_student.get(i).get_English() < 0) {
+				j_1.append(s[7] + "\\" + "    ");
+			} else
+				j_1.append(s[7] + StudentInformation.all_student.get(i).get_English() + "    ");
+			if (StudentInformation.all_student.get(i).get_Total() < 0) {
+				j_1.append(s[8] + "\\" + "\n");
+			} else
+				j_1.append(s[8] + StudentInformation.all_student.get(i).get_Total() + "\n");
+		}
+	}
+
+//	按某科降序排序界面
+	public static void init_12(String str) {
+//		清空文本区
+		StudentUI.j_1.setText("");
+//		暂时存储信息
+		StudentInformation student = new StudentInformation();
+
+		String s[] = new String[StudentInformation.number];
+		s[0] = "学号：";
+		s[1] = "姓名：";
+		s[2] = "性别：";
+		s[3] = "出生日期：";
+		s[4] = "java：";
+		s[5] = "体育：";
+		s[6] = "离散数学：";
+		s[7] = "英语：";
+		s[8] = "总分：";
+
+		for (int i = 0; i < StudentInformation.all_student.size() - 1; i++) {
+			for (int j = 0; j < StudentInformation.all_student.size() - 1; j++) {
+				if (str.equals("java")) {
+//			冒泡排序法
+
+					if (StudentInformation.all_student.get(j).get_java() < StudentInformation.all_student.get(j + 1)
+							.get_java()) {
+						student = StudentInformation.all_student.get(j);
+						StudentInformation.all_student.set(j, StudentInformation.all_student.get(j + 1));
+						StudentInformation.all_student.set(j + 1, student);
+					}
+				} else if (str.equals("体育")) {
+//			冒泡排序法
+
+					if (StudentInformation.all_student.get(j).get_physical() < StudentInformation.all_student.get(j + 1)
+							.get_physical()) {
+						student = StudentInformation.all_student.get(j);
+						StudentInformation.all_student.set(j, StudentInformation.all_student.get(j + 1));
+						StudentInformation.all_student.set(j + 1, student);
+					}
+
+				} else if (str.equals("离散数学")) {
+//			冒泡排序法
+
+					if (StudentInformation.all_student.get(j)
+							.get_Discrete_Mathematics() < StudentInformation.all_student.get(j + 1)
+									.get_Discrete_Mathematics()) {
+						student = StudentInformation.all_student.get(j);
+						StudentInformation.all_student.set(j, StudentInformation.all_student.get(j + 1));
+						StudentInformation.all_student.set(j + 1, student);
+					}
+
+				} else if (str.equals("英语")) {
+//			冒泡排序法
+
+					if (StudentInformation.all_student.get(j).get_English() < StudentInformation.all_student.get(j + 1)
+							.get_English()) {
+						student = StudentInformation.all_student.get(j);
+						StudentInformation.all_student.set(j, StudentInformation.all_student.get(j + 1));
+						StudentInformation.all_student.set(j + 1, student);
+					}
+
+				}
+			}
+		}
+
+		if (str.equals("java")) {
+			j_1.append("按java降序排序\n-----------------------------------\n");
+		} else if (str.equals("体育")) {
+			j_1.append("按体育降序排序\n-----------------------------------\n");
+		} else if (str.equals("离散数学")) {
+			j_1.append("按离散数学降序排序\n-----------------------------------\n");
+		} else if (str.equals("英语")) {
+			j_1.append("按英语降序排序\n-----------------------------------\n");
+		}
+
+		for (int i = 0; i < StudentInformation.all_student.size(); i++) {
+			j_1.append(s[0] + StudentInformation.all_student.get(i).get_Id() + "    ");
+			j_1.append(s[1] + StudentInformation.all_student.get(i).get_Name() + "    ");
+			j_1.append(s[2] + StudentInformation.all_student.get(i).getGender() + "    ");
+			j_1.append(s[3] + StudentInformation.all_student.get(i).getDate() + "    ");
+			if (StudentInformation.all_student.get(i).get_java() < 0) {
+				j_1.append(s[4] + "\\" + "    ");
+			} else
+				j_1.append(s[4] + StudentInformation.all_student.get(i).get_java() + "    ");
+			if (StudentInformation.all_student.get(i).get_physical() < 0) {
+				j_1.append(s[5] + "\\" + "    ");
+			} else
+				j_1.append(s[5] + StudentInformation.all_student.get(i).get_physical() + "    ");
+			if (StudentInformation.all_student.get(i).get_Discrete_Mathematics() < 0) {
+				j_1.append(s[6] + "\\" + "    ");
+			} else
+				j_1.append(s[6] + StudentInformation.all_student.get(i).get_Discrete_Mathematics() + "    ");
+			if (StudentInformation.all_student.get(i).get_English() < 0) {
+				j_1.append(s[7] + "\\" + "    ");
+			} else
+				j_1.append(s[7] + StudentInformation.all_student.get(i).get_English() + "    ");
+			if (StudentInformation.all_student.get(i).get_Total() < 0) {
+				j_1.append(s[8] + "\\" + "\n");
+			} else
+				j_1.append(s[8] + StudentInformation.all_student.get(i).get_Total() + "\n");
+		}
+	}
 }
