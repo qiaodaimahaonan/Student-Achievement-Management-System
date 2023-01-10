@@ -3,6 +3,9 @@ package myproject;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -351,7 +354,7 @@ class StudentListen_4 implements ActionListener {
 				}
 			}
 //			未查询到学生，提示
-			JOptionPane.showMessageDialog(jbutton_5, "未查询到当前学生！！！\n删除失败！！！", "消息提示", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "未查询到当前学生！！！\n删除失败！！！", "消息提示", JOptionPane.WARNING_MESSAGE);
 		} else {
 			jtextfield_1.setText("");
 		}
@@ -449,5 +452,60 @@ class StudentListen_6 implements ActionListener {
 			jtextfield.setText("");
 		}
 	}
+
+}
+
+class StudentListen_7 implements ActionListener {
+	JButton jbutton_1;
+	JTextField jtextfield;
+
+	public StudentListen_7(JButton jbutton_1, JTextField jtextfield) {
+		this.jbutton_1 = jbutton_1;
+		this.jtextfield = jtextfield;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if (jtextfield.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "请输入地址", "提示", JOptionPane.PLAIN_MESSAGE);
+			return;
+		}
+
+		String str = new String(jtextfield.getText());
+		try {
+			FileInputStream in = new FileInputStream(str);
+			InputStreamReader inReader = new InputStreamReader(in, "UTF-8");
+			BufferedReader bufReader = new BufferedReader(inReader);
+			String line = null;
+			while ((line = bufReader.readLine()) != null) {
+				StudentInformation student = new StudentInformation();
+				student.set_Id(StudentInformation.ID++);// 学号顺延，不重复
+				String[] str1 = line.split("\\s+");
+				for (int j = 0; j < str1.length; j++) {
+					student.set_Name(str1[0]);
+					student.setDate(str1[1]);
+					student.setGender(str1[2]);
+					student.set_java(Integer.parseInt(str1[3]));
+					student.set_English(Integer.parseInt(str1[4]));
+					student.set_physical(Integer.parseInt(str1[5]));
+					student.set_Discrete_Mathematics(Integer.parseInt(str1[6]));
+					student.set_Total(Integer.parseInt(str1[7]));
+
+				}
+				StudentInformation.all_student.add(student);
+			}
+			JOptionPane.showMessageDialog(null, "导入成功", "提示", JOptionPane.PLAIN_MESSAGE);
+			StudentUI.init_10();// 右边显示学生信息
+			bufReader.close();
+			inReader.close();
+			in.close();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, "读取出错，请输入正确的文件地址", "提示", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+
+	// D:\text.txt
 
 }

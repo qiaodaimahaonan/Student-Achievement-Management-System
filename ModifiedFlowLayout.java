@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 
+@SuppressWarnings("serial")
 public class ModifiedFlowLayout extends FlowLayout {
 	public ModifiedFlowLayout() {
 		super();

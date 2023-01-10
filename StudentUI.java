@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -38,26 +36,9 @@ public class StudentUI {
 
 	public static void main(String[] args) {
 
-//		实例化
-		StudentUI ui = new StudentUI();
-
-//自动保存		
-		Timer timer = new Timer();
-		// 间隔周期(/毫秒数)
-		long intevalPeriod = 600 * 1000;
-		// 每十分钟执行一次
-		TimerTask task = new TimerTask() {
-			public void run() {
-				init_9();
-			}
-		};
-		timer.scheduleAtFixedRate(task, intevalPeriod, intevalPeriod);
-
-//		调用方法
-		ui.init_1();
 	}
 
-//	主界面
+//	教师主界面
 	public void init_1() {
 
 //		窗口大小
@@ -85,6 +66,7 @@ public class StudentUI {
 		JMenuItem item_8 = new JMenuItem("按学号升序");
 		JMenuItem item_9 = new JMenuItem("按总分降序");
 		JMenuItem item_10 = new JMenuItem("按某科目降序");
+		JMenuItem item_11 = new JMenuItem("导入文件");
 //		定义字体
 		Font font = new Font("黑体", Font.PLAIN, 15);
 
@@ -101,6 +83,7 @@ public class StudentUI {
 		item_8.setFont(font);
 		item_9.setFont(font);
 		item_10.setFont(font);
+		item_11.setFont(font);
 //		加入
 		men_1.add(item_1);
 		men_1.add(item_2);
@@ -109,6 +92,7 @@ public class StudentUI {
 		men_1.add(item_5);
 		men_1.add(item_6);
 		men_1.add(item_7);
+		men_1.add(item_11);
 
 		men_2.add(item_8);
 		men_2.add(item_9);
@@ -232,6 +216,7 @@ public class StudentUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				StudentUI.init_10();
 				StudentUI.init_9();
 			}
 		});
@@ -267,6 +252,16 @@ public class StudentUI {
 				if (s != null) {
 					StudentUI.init_12(s);
 				}
+			}
+		});
+		// 导入文件按钮监听
+		item_11.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+//				调用方法
+				StudentUI.init_14();
 			}
 		});
 	}
@@ -672,7 +667,7 @@ public class StudentUI {
 			String explain = "本次保存信息如下：\n";
 			byte buf[] = explain.getBytes();
 			out.write(buf);
-			for (int i = StudentInformation.all_student.size() - 1; i >= 0; i--) {
+			for (int i = 0; i < StudentInformation.all_student.size(); i++) {
 				// 创建缓冲区,写入数据
 				student = "学号：" + StudentInformation.all_student.get(i).get_Id() + "   ";
 				byte buffer[] = student.getBytes();
@@ -1034,5 +1029,185 @@ public class StudentUI {
 		j.setLocationRelativeTo(null);
 //		显示窗口
 		j.setVisible(true);
+	}
+
+	// 导入文件
+	public static void init_14() {
+
+//		清空组件
+		StudentUI.jpanel_1.removeAll();
+//		刷新面板
+		StudentUI.jpanel_1.updateUI();
+
+		JLabel jlabel1 = new JLabel("导入文件                                        ");
+		StudentUI.jpanel_1.add(jlabel1);
+
+		JLabel jlabel = new JLabel("请输入您需要导入的文件地址：");
+		StudentUI.jpanel_1.add(jlabel);
+
+		JTextField jtextfield = new JTextField(12);
+		StudentUI.jpanel_1.add(jtextfield);
+
+		// 按钮
+		JButton jbutton_1 = new JButton("提交");
+
+//				加入按钮
+		StudentUI.jpanel_1.add(jbutton_1);
+
+//				注册监听
+		StudentListen_7 e_7 = new StudentListen_7(jbutton_1, jtextfield);
+		jbutton_1.addActionListener(e_7);
+	}
+
+//	学生主界面
+	public void init_15() {
+
+//		窗口大小
+		jframe_1.setSize(850, 500);
+//		空布局
+		jframe_1.setLayout(null);
+//		窗口不可调整
+		jframe_1.setResizable(false);
+//		关闭窗口则退出程序
+		jframe_1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		菜单栏
+		JMenuBar bar = new JMenuBar();
+//		一级菜单
+		JMenu men_1 = new JMenu("基本操作");
+		JMenu men_2 = new JMenu("排序");
+//		子菜单
+
+		JMenuItem item_5 = new JMenuItem("查询成绩");
+		JMenuItem item_6 = new JMenuItem("学习情况报表");
+
+		JMenuItem item_8 = new JMenuItem("按学号升序");
+		JMenuItem item_9 = new JMenuItem("按总分降序");
+		JMenuItem item_10 = new JMenuItem("按某科目降序");
+		JMenuItem item_11 = new JMenuItem("导入文件");
+//		定义字体
+		Font font = new Font("黑体", Font.PLAIN, 15);
+
+//		设置菜单字体
+		men_1.setFont(font);
+		men_2.setFont(font);
+		item_5.setFont(font);
+		item_6.setFont(font);
+		item_8.setFont(font);
+		item_9.setFont(font);
+		item_10.setFont(font);
+		item_11.setFont(font);
+//		加入
+
+		men_1.add(item_5);
+		men_1.add(item_6);
+		men_1.add(item_11);
+
+		men_2.add(item_8);
+		men_2.add(item_9);
+		men_2.add(item_10);
+
+		bar.add(men_1);
+		bar.add(men_2);
+		jframe_1.setJMenuBar(bar);
+
+//		设置面板位置、大小、颜色
+		jpanel_1.setBounds(0, 0, 200, 500);
+		jpanel_2.setBounds(210, 0, 640, 500);
+		jpanel_1.setBackground(Color.LIGHT_GRAY);
+		jpanel_2.setBackground(Color.LIGHT_GRAY);
+		jframe_1.add(jpanel_1);
+		jframe_1.add(jpanel_2);
+
+		// 设置文本区不能编辑
+		j_1.setEditable(false);
+		// 将j1作为可滚动面板sp的显示区域
+		JScrollPane sp = new JScrollPane(j_1);
+		sp.setSize(625, 440);
+		StudentUI.jpanel_2.add(sp);
+
+		JScrollPane scrollPane = new JScrollPane(jpanel_1, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setSize(200, 440);
+		jframe_1.add(scrollPane);
+
+//		窗口居中
+		jframe_1.setLocationRelativeTo(null);
+//		窗口显示
+		jframe_1.setVisible(true);
+
+//		注册 查询学生 按钮的监听
+		item_5.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String[] options = { "通过学号查询", "通过姓名查询" };
+				String s = (String) JOptionPane.showInputDialog(null, "请输入你的选项：", "提示", JOptionPane.QUESTION_MESSAGE,
+						null, options, null);
+				if (s != null) {
+					if (s.equals("通过学号查询")) {
+						StudentUI.init_6();
+					} else if (s.equals("通过姓名查询")) {
+						StudentUI.init_7();
+					}
+				}
+			}
+		});
+		// 学习情况报表 按钮监听
+		item_6.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				StudentUI.init_11();
+				StudentUI.init_8(StudentInformation.all_student);
+
+			}
+		});
+		// 按学号排序 按钮监听
+		item_8.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				StudentUI.init_10();
+
+			}
+		});
+//		按 总分降序按钮 的监听
+		item_9.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				StudentUI.init_11();
+			}
+		});
+//		按 某科降序按钮 的监听
+		item_10.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String[] options = { "java", "体育", "离散数学", "英语" };
+				String s = (String) JOptionPane.showInputDialog(null, "请输入你的选项：", "提示", JOptionPane.QUESTION_MESSAGE,
+						null, options, null);
+				if (s != null) {
+					StudentUI.init_12(s);
+				}
+			}
+		});
+		// 导入文件按钮监听
+		item_11.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+//				调用方法
+				StudentUI.init_14();
+			}
+		});
 	}
 }
